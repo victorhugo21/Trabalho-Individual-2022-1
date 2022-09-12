@@ -2,7 +2,7 @@ version: '3'
 
 services:
     db:
-        image: postgres
+        image: postgres:14
         container_name: db
         environment:
             - POSTGRES_DB=library_db
@@ -13,13 +13,25 @@ services:
         networks:
             - library-network
     backend:
-        image: python:3
+        image: python:3.9
         container_name: backend
         build: ./library_back
         ports:
             - '8000:8000'
         depends_on:
             - db
+        networks:
+            - library-network
+    frontend:
+        image: node:13.12.0-alpine
+        container_name: frontend
+        stdin_open: true
+        build: ./library_front
+        ports:
+            - '3000:3000'
+        depends_on:
+            - db
+            - backend  
         networks:
             - library-network
 networks:
