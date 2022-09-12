@@ -1,12 +1,11 @@
-FROM python:3.9
+FROM python:3.8
 
 WORKDIR /app
 
 COPY requirements.txt ./
 RUN pip install --upgrade pip
-RUN pip install psycopg2-binary
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000  
+CMD bash -c " python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"

@@ -1,29 +1,31 @@
-version: '3'
+version: '3.2'
 
 services:
-    db:
+    library_db:
         image: postgres:14
+        restart: always
         container_name: db
         environment:
             - POSTGRES_DB=library_db
             - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=password
+            - POSTGRES_PASSWORD=postgres
         ports:
-            - "5432:5432"
+            - "5434:5432"
         networks:
             - network
     backend:
-        image: python:3.9
+        image: python:3.8
         container_name: backend
         build: ./library_back
         ports:
             - '8000:8000'
         depends_on:
-            - db
+            - library_db
         environment:
             - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=password
+            - POSTGRES_PASSWORD=postgres
             - POSTGRES_DB=library_db
+            - POSTGRES_HOST=library_db
             - POSTGRES_PORT=5432
         networks:
             - network
@@ -35,7 +37,7 @@ services:
         ports:
             - '3000:3000'
         depends_on:
-            - db
+            - library_db
             - backend  
         networks:
             - network
@@ -49,4 +51,5 @@ services:
         networks:
             - network
 networks:
-  network:
+    network:
+        driver: bridge
