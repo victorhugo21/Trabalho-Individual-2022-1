@@ -11,7 +11,7 @@ services:
         ports:
             - "5432:5432"
         networks:
-            - library-network
+            - network
     backend:
         image: python:3.9
         container_name: backend
@@ -20,8 +20,13 @@ services:
             - '8000:8000'
         depends_on:
             - db
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=library_db
+            - POSTGRES_PORT=5432
         networks:
-            - library-network
+            - network
     frontend:
         image: node:13.12.0-alpine
         container_name: frontend
@@ -33,6 +38,15 @@ services:
             - db
             - backend  
         networks:
-            - library-network
+            - network
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - 8080:80
+        depends_on:
+            - frontend
+        networks:
+            - network
 networks:
-  library-network:
+  network:
