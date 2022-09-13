@@ -31,10 +31,12 @@ jobs:
           python manage.py migrate
           python manage.py test
 
-      - name: Install Dependencies and Run tests front
+      - name: Setup node
         uses: actions/setup-node@v3
-          with:
-            node-version: [10.x, 12.x, 14.x, 15.x]
+        with:
+          node-version: 16.x
+      
+      - name: Run tests front
         run: |
           cd library_front/
           npm install

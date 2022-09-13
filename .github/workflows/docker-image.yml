@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Docker Compose Build and Up
       - uses: actions/checkout@v3
+      - name: Docker Compose Build and Up
         run: docker-compose up -d --build
       
       - name: Login to DockerHub

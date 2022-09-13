@@ -13,16 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Instalacao do lint
+      - name: Setup python
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
+
       - name: Checkout PyTorch
         uses: actions/checkout@master
+      
+      - name: Instalacao do lint
         run: pip install flake8
         working-directory: ./
+
       - name: Run lint back
         run: flake8 --max-line-length=150 library_back
+        
       - name: Run lint front
         run: flake8 --max-line-length=150 library_front
         env:
