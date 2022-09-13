@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies back
+        run: |
+          cd library_back/
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        env:
+          POSTGRES_DB: library_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+
+      - name: Run migrations and test back
+        run: |
+          cd library_back/
+          python manage.py makemigrations 
+          python manage.py migrate
+          python manage.py test
+
+      - name: Install Dependencies and Run tests front
+        uses: actions/setup-node@v3
+          with:
+            node-version: [10.x, 12.x, 14.x, 15.x]
+        run: |
+          cd library_front/
+          npm install
+          npm run test

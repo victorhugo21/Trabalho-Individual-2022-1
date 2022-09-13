@@ -1,0 +1,29 @@
+name: Lint
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Instalacao do lint
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - name: Checkout PyTorch
+        uses: actions/checkout@master
+        run: pip install flake8
+        working-directory: ./
+      - name: Run lint back
+        run: flake8 --max-line-length=150 library_back
+      - name: Run lint front
+        run: flake8 --max-line-length=150 library_front
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
