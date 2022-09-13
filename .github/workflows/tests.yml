@@ -17,14 +17,14 @@ jobs:
           cd library_back/
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-        env:
-          POSTGRES_DB: library_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
 
       - name: Run migrations and test back
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: library_db
+          POSTGRES_HOST: library_db
+          POSTGRES_PORT: 5432
         run: |
           cd library_back/
           python manage.py makemigrations 

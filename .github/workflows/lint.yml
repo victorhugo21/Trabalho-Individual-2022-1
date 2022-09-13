@@ -22,13 +22,13 @@ jobs:
         uses: actions/checkout@master
       
       - name: Instalacao do lint
-        run: pip install flake8
         working-directory: ./
+        run: pip install flake8
 
       - name: Run lint back
-        run: flake8 --max-line-length=150 library_back
-        
+        working-directory: ./
+        run: bash -c "flake8 --max-line-length=200 library_back"
+
       - name: Run lint front
-        run: flake8 --max-line-length=150 library_front
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./
+        run: bash -c "flake8 --max-line-length=200 library_front"
